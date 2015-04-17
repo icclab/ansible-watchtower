@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  author: Victor Ion Munteanu
+  description: Installs Watchtower Cloud Incident Management
+  license: Apache 2.0
+  min_ansible_version: 1.8
+  platforms:
+  - name: Ubuntu
+    versions:
+    - all
+  - name: Debian
+    versions:
+    - all
+  categories:
+  - cloud
+  - monitoring
+dependencies: []
