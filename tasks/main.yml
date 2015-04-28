@@ -1,1 +1,6 @@
 ---
+- name: Install git
+  apt: name=git state=present
+
+- name: Install Maven
+  apt: name=mvn state=present
