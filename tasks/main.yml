@@ -1,6 +1,18 @@
 ---
-- name: Install git
-  apt: name=git state=present
+- name: Add hostname to /etc/hosts
+  lineinfile: dest=/etc/hosts regexp='^127\.0\.0\.1' line="127.0.0.1 localhost {{inventory_hostname}}" owner=root group=root mode=0644
+
+- name: Add Oracle Java apt repository
+  apt_repository: repo='ppa:webupd8team/java'
+
+- name: Update and upgrade all packages
+  apt: upgrade=dist update_cache=yes
+
+- name: Install Git
+  apt: name=git state=latest
+
+- name: Install Java
+  apt: name=oracle-java7-installer state=latest
 
 - name: Install Maven
-  apt: name=mvn state=present
+  apt: name=maven state=latest
