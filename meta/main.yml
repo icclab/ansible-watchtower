@@ -12,5 +12,5 @@ galaxy_info:
   - cloud
   - monitoring
 dependencies:
-  - { role: tkuhlman.zookeeper, zookeeper_hosts: '{{inventory_hostname}}:2181' }
-  - { role: tkuhlman.kafka, kafka_hosts: '{{inventory_hostname}}:9092', zookeeper_hosts: '{{inventory_hostname}}:2181' }
+  - { role: tkuhlman.zookeeper, zookeeper_hosts: 'localhost:2181' }
+  - { role: tkuhlman.kafka, kafka_hosts: 'localhost:9092', zookeeper_hosts: 'localhost:2181' }

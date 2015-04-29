@@ -3,6 +3,11 @@ Role Name
 
 A brief description of the role goes here.
 
+ansible-galaxy install tkuhlman.zookeeper
+ansible-galaxy install tkuhlman.kafka
+ansible-galaxy install nemros.watchtower
+
+
 Requirements
 ------------
 
