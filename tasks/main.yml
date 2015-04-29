@@ -123,10 +123,14 @@
 - name: Download Camunda
   get_url: url=http://camunda.org/release/camunda-bpm/tomcat/7.3/camunda-bpm-tomcat-7.3.0-alpha3.tar.gz dest="/home/{{ansible_ssh_user}}/"
 
+- name: Create Camunda directory
+  file: path="/home/{{ansible_ssh_user}}/camunda" state=directory
+
 - name: Unpack Camunda
   unarchive: src="/home/{{ansible_ssh_user}}/camunda-bpm-tomcat-7.3.0-alpha3.tar.gz" dest="/home/{{ansible_ssh_user}}/camunda" copy=no
-  notify:
-    - Start Camunda
+
+- name: Start Camunda
+  command: "/home/{{ansible_ssh_user}}/camunda/start-camunda.sh"
 
 - name: Download watchtower-workflow-camunda-1.0.1-SNAPSHOT
   git: repo=https://github.com/icclab/watchtower-workflow-camunda.git dest="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda"
@@ -146,4 +150,4 @@
     chdir: "/home/{{ansible_ssh_user}}/watchtower-workflow-camunda"
 
 - name: Install watchtower-workflow-camunda
-  command: mv "/home/{{ansible_ssh_user}}/watchtower-workflow/target/watchtower-workflow-camunda.war" "/home/{{ansible_ssh_user}}/camunda/server/apache-tomcat-7.0.50/webapps/"
+  command: mv "/home/{{ansible_ssh_user}}/watchtower-workflow-camunda/target/watchtower-workflow-camunda.war" "/home/{{ansible_ssh_user}}/camunda/server/apache-tomcat-7.0.50/webapps/"
