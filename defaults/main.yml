@@ -1,1 +1,5 @@
 ---
+release: false
+mysql_username: root
+mysql_password: root
+mysql_database: cim

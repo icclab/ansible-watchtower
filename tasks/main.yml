@@ -16,3 +16,14 @@
 
 - name: Install Maven
   apt: name=maven state=latest
+
+- name: Install MySQL
+  apt: name=mysql state=latest
+
+- name: Install watchtower-monitoring
+
+  when: not release
+
+- name: Install latest release of watchtower-monitoring
+  get_url: url=https://github.com/icclab/watchtower-monitoring/archive/watchtower-monitoring-0.1.0.tar.gz dest=/home/{{ansible_ssh_user}}/
+  when: release

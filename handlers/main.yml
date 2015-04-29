@@ -1,1 +1,9 @@
 ---
+- name: Start watchtower-monitoring
+  service: name=watchtower-monitoring state=start
+
+- name: Start watchtower-workflow
+  service: name=watchtower-workflow state=start
+
+- name: Start watchtower-automation
+  service: name=watchtower-automation state=start
