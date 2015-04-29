@@ -7,3 +7,9 @@
 
 - name: Restart watchtower-automation
   service: name=watchtower-automation state=restarted
+
+- name: Restart Rundeck
+  service: name=rundeckd state=restarted
+
+- name: Start Camunda
+  command: "/home/{{ansible_ssh_user}}/camunda/start-camunda.sh"

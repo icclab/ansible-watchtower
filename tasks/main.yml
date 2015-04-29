@@ -111,3 +111,39 @@
   command: mv /etc/watchtower/automation-config.yml-sample /etc/watchtower/automation-config.yml
   notify:
     - Restart watchtower-automation
+
+- name: Download Rundeck
+  get_url: url=http://dl.bintray.com/rundeck/rundeck-deb/rundeck-2.5.0-1-GA.deb dest="/home/{{ansible_ssh_user}}/"
+
+- name: Install Rundeck
+  apt: deb="/home/{{ansible_ssh_user}}/rundeck-2.5.0-1-GA.deb"
+  notify:
+    - Restart Rundeck
+
+- name: Download Camunda
+  get_url: url=http://camunda.org/release/camunda-bpm/tomcat/7.3/camunda-bpm-tomcat-7.3.0-alpha3.tar.gz dest="/home/{{ansible_ssh_user}}/"
+
+- name: Unpack Camunda
+  unarchive: src="/home/{{ansible_ssh_user}}/camunda-bpm-tomcat-7.3.0-alpha3.tar.gz" dest="/home/{{ansible_ssh_user}}/camunda" copy=no
+  notify:
+    - Start Camunda
+
+- name: Download watchtower-workflow-camunda-1.0.1-SNAPSHOT
+  git: repo=https://github.com/icclab/watchtower-workflow-camunda.git dest="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda"
+  when: not release
+
+- name: Download watchtower-workflow-camunda-1.0.0
+  get_url: url=https://github.com/icclab/watchtower-workflow-camunda/archive/1.0.0.tar.gz dest="/home/{{ansible_ssh_user}}/"
+  when: release
+
+- name: Unpack watchtower-workflow-camunda-1.0.0
+  unarchive: src="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda-1.0.0.tar.gz" dest="/home/{{ansible_ssh_user}}/" copy=no
+  when: release
+
+- name: Package watchtower-workflow-camunda
+  command: mvn clean install
+  args:
+    chdir: "/home/{{ansible_ssh_user}}/watchtower-workflow-camunda"
+
+- name: Install watchtower-workflow-camunda
+  command: mv "/home/{{ansible_ssh_user}}/watchtower-workflow/target/watchtower-workflow-camunda.war" "/home/{{ansible_ssh_user}}/camunda/server/apache-tomcat-7.0.50/webapps/"

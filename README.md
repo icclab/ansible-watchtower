@@ -8,22 +8,28 @@
 
 Installs Watchtower which is a Cloud Incident Management solution.
 
-## Role Variables
+### Role Variables
 
 Currently, there are no variables which can be set.
 
-## Dependencies
+### Dependencies
 
 `ansible-watchtower` requires several other roles which can be easily installed by running the following commands:
 
 ```
 ansible-galaxy install tkuhlman.zookeeper
 ansible-galaxy install tkuhlman.kafka
-ansible-galaxy install nemros.watchtower
 ```
 
+### Installation
 
-## Example Playbook
+`ansible-watchtower` can be easily installed by running:
+
+```
+ansible-galaxy install nemros.watchtower
+``` 
+
+### Example Playbook
 
 The following is an example playbook to use this role:
 
@@ -44,7 +50,7 @@ you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
     http://www.apache.org/licenses/LICENSE-2.0
-    
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
