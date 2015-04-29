@@ -56,6 +56,9 @@
 
 - name: Install watchtower-monitoring
   apt: deb="/home/{{ansible_ssh_user}}/watchtower-monitoring/debs/binaries/watchtower-monitoring-1.0.1-SNAPSHOT.deb"
+
+- name: Setup watchtower-monitoring
+  command: mv /etc/watchtower/monitoring-config.yml-sample /etc/watchtower/monitoring-config.yml
   notify:
     - Restart watchtower-monitoring
 
@@ -78,6 +81,9 @@
 
 - name: Install watchtower-workflow
   apt: deb="/home/{{ansible_ssh_user}}/watchtower-workflow/debs/binaries/watchtower-workflow-1.0.1-SNAPSHOT.deb"
+
+- name: Setup watchtower-workflow
+  command: mv /etc/watchtower/workflow-config.yml-sample /etc/watchtower/workflow-config.yml
   notify:
     - Restart watchtower-workflow
 
@@ -100,5 +106,8 @@
 
 - name: Install watchtower-automation
   apt: deb="/home/{{ansible_ssh_user}}/watchtower-automation/debs/binaries/watchtower-automation-1.0.1-SNAPSHOT.deb"
+
+- name: Setup watchtower-automation
+  command: mv /etc/watchtower/automation-config.yml-sample /etc/watchtower/automation-config.yml
   notify:
     - Restart watchtower-automation
