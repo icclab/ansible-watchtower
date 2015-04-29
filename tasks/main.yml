@@ -22,7 +22,7 @@
 
 - name: Install watchtower-monitoring
   git: repo=https://github.com/icclab/watchtower-monitoring.git dest=/home/{{ansible_ssh_user}}/
-  shell: mvn clean package chdir=/home/{{ansible_ssh_user}}/watchtower-monitoring
+  shell: 'mvn clean package' chdir=/home/{{ansible_ssh_user}}/watchtower-monitoring
   when: not release
 
 - name: Install latest release of watchtower-monitoring
