@@ -20,16 +20,16 @@
 - name: Install MySQL
   apt: name=mysql-server state=latest
 
-- name: Downloading watchtower-common
-  git: repo=https://github.com/icclab/watchtower-common.git dest="/home/{{ansible_ssh_user}}/"
+- name: Download watchtower-common-1.0.1-SNAPSHOT
+  git: repo=https://github.com/icclab/watchtower-common.git dest="/home/{{ansible_ssh_user}}/watchtower-common"
   when: not release
 
-- name: Downloading watchtower-common-0.1.0
-  get_url: url=https://github.com/icclab/watchtower-common/archive/watchtower-common-0.1.0.tar.gz dest="/home/{{ansible_ssh_user}}/"
+- name: Download watchtower-common-1.0.0
+  get_url: url=https://github.com/icclab/watchtower-common/archive/1.0.0.tar.gz dest="/home/{{ansible_ssh_user}}/"
   when: release
 
-- name: Unpacking watchtower-common-0.1.0
-  unarchive: src="/home/{{ansible_ssh_user}}/watchtower-common-0.1.0.tar.gz" dest="/home/{{ansible_ssh_user}}/" copy=no
+- name: Unpack watchtower-common-1.0.0
+  unarchive: src="/home/{{ansible_ssh_user}}/watchtower-common-1.0.0.tar.gz" dest="/home/{{ansible_ssh_user}}/" copy=no
   when: release
 
 - name: Install watchtower-common
@@ -37,10 +37,68 @@
   args:
     chdir: "/home/{{ansible_ssh_user}}/watchtower-common"
 
-- name: Downloading watchtower-monitoring
-  git: repo=https://github.com/icclab/watchtower-monitoring.git dest="/home/{{ansible_ssh_user}}/"
+- name: Download watchtower-monitoring-1.0.1-SNAPSHOT
+  git: repo=https://github.com/icclab/watchtower-monitoring.git dest="/home/{{ansible_ssh_user}}/watchtower-monitoring"
   when: not release
 
-- name: Downloading latest release of watchtower-monitoring
-  get_url: url=https://github.com/icclab/watchtower-monitoring/archive/watchtower-monitoring-0.1.0.tar.gz dest="/home/{{ansible_ssh_user}}/"
+- name: Download watchtower-monitoring-1.0.0
+  get_url: url=https://github.com/icclab/watchtower-monitoring/archive/1.0.0.tar.gz dest="/home/{{ansible_ssh_user}}/"
   when: release
+
+- name: Unpack watchtower-monitoring-1.0.0
+  unarchive: src="/home/{{ansible_ssh_user}}/watchtower-monitoring-1.0.0.tar.gz" dest="/home/{{ansible_ssh_user}}/" copy=no
+  when: release
+
+- name: Package watchtower-monitoring
+  command: mvn clean package
+  args:
+    chdir: "/home/{{ansible_ssh_user}}/watchtower-monitoring"
+
+- name: Install watchtower-monitoring
+  apt: deb="/home/{{ansible_ssh_user}}/watchtower-monitoring/debs/binaries/watchtower-monitoring-1.0.1-SNAPSHOT.deb"
+  notify:
+    - Restart watchtower-monitoring
+
+- name: Download watchtower-workflow-1.0.1-SNAPSHOT
+  git: repo=https://github.com/icclab/watchtower-workflow.git dest="/home/{{ansible_ssh_user}}/watchtower-workflow"
+  when: not release
+
+- name: Download watchtower-workflow-1.0.0
+  get_url: url=https://github.com/icclab/watchtower-workflow/archive/1.0.0.tar.gz dest="/home/{{ansible_ssh_user}}/"
+  when: release
+
+- name: Unpack watchtower-workflow-1.0.0
+  unarchive: src="/home/{{ansible_ssh_user}}/watchtower-workflow-1.0.0.tar.gz" dest="/home/{{ansible_ssh_user}}/" copy=no
+  when: release
+
+- name: Package watchtower-workflow
+  command: mvn clean package
+  args:
+    chdir: "/home/{{ansible_ssh_user}}/watchtower-workflow"
+
+- name: Install watchtower-workflow
+  apt: deb="/home/{{ansible_ssh_user}}/watchtower-workflow/debs/binaries/watchtower-workflow-1.0.1-SNAPSHOT.deb"
+  notify:
+    - Restart watchtower-workflow
+
+- name: Download watchtower-automation-1.0.1-SNAPSHOT
+  git: repo=https://github.com/icclab/watchtower-automation.git dest="/home/{{ansible_ssh_user}}/watchtower-automation"
+  when: not release
+
+- name: Download watchtower-automation-1.0.0
+  get_url: url=https://github.com/icclab/watchtower-automation/archive/1.0.0.tar.gz dest="/home/{{ansible_ssh_user}}/"
+  when: release
+
+- name: Unpack watchtower-automation-1.0.0
+  unarchive: src="/home/{{ansible_ssh_user}}/watchtower-automation-1.0.0.tar.gz" dest="/home/{{ansible_ssh_user}}/" copy=no
+  when: release
+
+- name: Package watchtower-automation
+  command: mvn clean package
+  args:
+    chdir: "/home/{{ansible_ssh_user}}/watchtower-automation"
+
+- name: Install watchtower-automation
+  apt: deb="/home/{{ansible_ssh_user}}/watchtower-automation/debs/binaries/watchtower-automation-1.0.1-SNAPSHOT.deb"
+  notify:
+    - Restart watchtower-automation

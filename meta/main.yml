@@ -13,4 +13,4 @@ galaxy_info:
   - monitoring
 dependencies:
   - { role: tkuhlman.zookeeper, zookeeper_hosts: 'localhost:2181' }
-  - { role: tkuhlman.kafka, kafka_hosts: 'localhost:9092', zookeeper_hosts: 'localhost:2181' }
+  - { role: tkuhlman.kafka, kafka_hosts: 'localhost:9092', zookeeper_hosts: 'localhost:2181', kafka_listen_address: 'localhost' }

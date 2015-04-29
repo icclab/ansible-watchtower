@@ -1,9 +1,9 @@
 ---
-- name: Start watchtower-monitoring
-  service: name=watchtower-monitoring state=start
+- name: Restart watchtower-monitoring
+  service: name=watchtower-monitoring state=restart
 
-- name: Start watchtower-workflow
-  service: name=watchtower-workflow state=start
+- name: Restart watchtower-workflow
+  service: name=watchtower-workflow state=restart
 
-- name: Start watchtower-automation
-  service: name=watchtower-automation state=start
+- name: Restart watchtower-automation
+  service: name=watchtower-automation state=restart
