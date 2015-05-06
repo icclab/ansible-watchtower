@@ -1,4 +1,7 @@
 ---
+- name: Restart MySQL
+  service: name=mysql state=restarted
+
 - name: Restart watchtower-monitoring
   service: name=watchtower-monitoring state=restarted
 

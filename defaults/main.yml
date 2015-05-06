@@ -1,5 +1,6 @@
 ---
 release: false
-mysql_username: root
-mysql_password: root
-mysql_database: cim
+mysql_root_password: reallylongpassword
+mysql_username: watchtower
+mysql_password: anotherreallylongpassword
+mysql_database: watchtower

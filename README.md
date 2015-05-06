@@ -10,7 +10,15 @@ Installs Watchtower which is a Cloud Incident Management solution.
 
 ### Role Variables
 
-Currently, there are no variables which can be set.
+The following role variables can be set:
+
+| Name | Values | Default | Description |
+|------|--------|---------|-------------|
+| release | true / false | false | If set to true the role will install the latest release, otherwise it will install the latest code |
+| mysql_root_password | String | reallylongpassword | Sets the MySQL root password |
+| mysql_username | String | watchtower | Watchtower's MySQL username |
+| mysql_password | String | anotherlongpassword | Watchtower's MySQL password |
+| mysql_database | String | watchtower | Watchtower's MySQL database |
 
 ### Dependencies
 
@@ -27,7 +35,7 @@ ansible-galaxy install tkuhlman.kafka
 
 ```
 ansible-galaxy install nemros.watchtower
-``` 
+```
 
 ### Example Playbook
 

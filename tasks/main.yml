@@ -2,8 +2,8 @@
 - name: Add Oracle Java apt repository
   apt_repository: repo="ppa:webupd8team/java"
 
-- name: Upgrade all packages
-  apt: upgrade=dist update_cache=yes
+- name: Update apt cache
+  apt: update_cache=yes
 
 - name: Install Git
   apt: name=git state=latest
@@ -19,6 +19,35 @@
 
 - name: Install MySQL
   apt: name=mysql-server state=latest
+
+- name: Update MySQL password
+  mysql_user: name=root host={{ item }} password={{ mysql_root_password }} check_implicit_admin=yes
+  with_items:
+   - 127.0.0.1
+   - ::1
+   - localhost
+
+- name: Remove anonymous users from MySQL
+  mysql_user: name='' host={{ item }} state=absent
+  with_items:
+    - 127.0.0.1
+    - ::1
+    - localhost
+
+- name: Remove the test database
+  mysql_db: name=test state=absent
+
+- name: Add Watchtower database
+  mysql_db: name={{ mysql_database }} state=present
+
+- name: Add Watchtower user
+  mysql_user: name={{ mysql_username }} password={{ mysql_password }} host={{ item }} priv=*.*:ALL state=present
+  with_items:
+    - 127.0.0.1
+    - ::1
+    - localhost
+  notify:
+    - Restart MySQL
 
 - name: Download watchtower-common-1.0.1-SNAPSHOT
   git: repo=https://github.com/icclab/watchtower-common.git dest="/home/{{ansible_ssh_user}}/watchtower-common"
@@ -130,7 +159,7 @@
   unarchive: src="/home/{{ansible_ssh_user}}/camunda-bpm-tomcat-7.3.0-alpha3.tar.gz" dest="/home/{{ansible_ssh_user}}/camunda" copy=no
 
 - name: Start Camunda
-  command: "/home/{{ansible_ssh_user}}/camunda/start-camunda.sh"
+  shell: "/home/{{ansible_ssh_user}}/camunda/start-camunda.sh >> camunda.txt"
 
 - name: Download watchtower-workflow-camunda-1.0.1-SNAPSHOT
   git: repo=https://github.com/icclab/watchtower-workflow-camunda.git dest="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda"
@@ -143,6 +172,15 @@
 - name: Unpack watchtower-workflow-camunda-1.0.0
   unarchive: src="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda-1.0.0.tar.gz" dest="/home/{{ansible_ssh_user}}/" copy=no
   when: release
+
+- name: Setup watchtower-workflow-camunda MySQL database
+  replace: dest="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda/src/main/resources/META-INF/persistence.xml" regexp="%database%" replace="{{ mysql_database }}"
+
+- name: Setup watchtower-workflow-camunda MySQL username
+  replace: dest="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda/src/main/resources/META-INF/persistence.xml" regexp="%database%" replace="{{ mysql_username }}"
+
+- name: Setup watchtower-workflow-camunda MySQL password
+  replace: dest="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda/src/main/resources/META-INF/persistence.xml" regexp="%database%" replace="{{ mysql_password }}"
 
 - name: Package watchtower-workflow-camunda
   command: mvn clean install
