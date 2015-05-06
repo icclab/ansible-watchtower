@@ -8,6 +8,9 @@
 - name: Install Git
   apt: name=git state=latest
 
+- name: Install python-mysqldb
+  apt: python-mysqldb state=installed
+
 - name: Accept Oracle License
   debconf: name=oracle-java7-installer question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
 
