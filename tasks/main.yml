@@ -9,7 +9,7 @@
   apt: name=git state=latest
 
 - name: Install python-mysqldb
-  apt: name=python-mysqldb state=installed
+  apt: name=  python-mysqldb state=installed
 
 - name: Accept Oracle License
   debconf: name=oracle-java7-installer question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
@@ -180,10 +180,10 @@
   replace: dest="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda/src/main/resources/META-INF/persistence.xml" regexp="%database%" replace="{{ mysql_database }}"
 
 - name: Setup watchtower-workflow-camunda MySQL username
-  replace: dest="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda/src/main/resources/META-INF/persistence.xml" regexp="%database%" replace="{{ mysql_username }}"
+  replace: dest="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda/src/main/resources/META-INF/persistence.xml" regexp="%username%" replace="{{ mysql_username }}"
 
 - name: Setup watchtower-workflow-camunda MySQL password
-  replace: dest="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda/src/main/resources/META-INF/persistence.xml" regexp="%database%" replace="{{ mysql_password }}"
+  replace: dest="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda/src/main/resources/META-INF/persistence.xml" regexp="%password%" replace="{{ mysql_password }}"
 
 - name: Package watchtower-workflow-camunda
   command: mvn clean install
