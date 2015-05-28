@@ -30,6 +30,9 @@
    - ::1
    - localhost
 
+- name: Copy .my.cnf file into the root home folder
+  template: src=.my-cnf.j2 dest=/root/.my.cnf owner=root mode=0600
+
 - name: Remove anonymous users from MySQL
   mysql_user: name='' host={{ item }} state=absent
   with_items:
@@ -90,7 +93,7 @@
   apt: deb="/home/{{ansible_ssh_user}}/watchtower-monitoring/debs/binaries/watchtower-monitoring-1.0.1-SNAPSHOT.deb"
 
 - name: Setup watchtower-monitoring
-  command: mv /etc/watchtower/monitoring-config.yml-sample /etc/watchtower/monitoring-config.yml
+  template: src=monitoring-config.yml.j2 dest=/etc/watchtower/monitoring-config.yml owner=root mode=0644
   notify:
     - Restart watchtower-monitoring
 
@@ -115,7 +118,7 @@
   apt: deb="/home/{{ansible_ssh_user}}/watchtower-workflow/debs/binaries/watchtower-workflow-1.0.1-SNAPSHOT.deb"
 
 - name: Setup watchtower-workflow
-  command: mv /etc/watchtower/workflow-config.yml-sample /etc/watchtower/workflow-config.yml
+  template: src=workflow-config.yml.j2 dest=/etc/watchtower/workflow-config.yml owner=root mode=0644
   notify:
     - Restart watchtower-workflow
 
@@ -140,15 +143,15 @@
   apt: deb="/home/{{ansible_ssh_user}}/watchtower-automation/debs/binaries/watchtower-automation-1.0.1-SNAPSHOT.deb"
 
 - name: Setup watchtower-automation
-  command: mv /etc/watchtower/automation-config.yml-sample /etc/watchtower/automation-config.yml
+  template: src=automation-config.yml.j2 dest=/etc/watchtower/automation-config.yml owner=root mode=0644
   notify:
     - Restart watchtower-automation
 
 - name: Download Rundeck
-  get_url: url=http://dl.bintray.com/rundeck/rundeck-deb/rundeck-2.5.0-1-GA.deb dest="/home/{{ansible_ssh_user}}/"
+  get_url: url=http://dl.bintray.com/rundeck/rundeck-deb/rundeck-2.5.1-1-GA.deb dest="/home/{{ansible_ssh_user}}/"
 
 - name: Install Rundeck
-  apt: deb="/home/{{ansible_ssh_user}}/rundeck-2.5.0-1-GA.deb"
+  apt: deb="/home/{{ansible_ssh_user}}/rundeck-2.5.1-1-GA.deb"
   notify:
     - Restart Rundeck
 
@@ -176,14 +179,11 @@
   unarchive: src="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda-1.0.0.tar.gz" dest="/home/{{ansible_ssh_user}}/" copy=no
   when: release
 
-- name: Setup watchtower-workflow-camunda MySQL database
-  replace: dest="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda/src/main/resources/META-INF/persistence.xml" regexp="%database%" replace="{{ mysql_database }}"
+- name: Setup watchtower-workflow-camunda configuration
+  template: src=configuration.properties.j2 dest="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda/src/main/resources/configuration.properties" owner={{ansible_ssh_user}} mode=0644
 
-- name: Setup watchtower-workflow-camunda MySQL username
-  replace: dest="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda/src/main/resources/META-INF/persistence.xml" regexp="%username%" replace="{{ mysql_username }}"
-
-- name: Setup watchtower-workflow-camunda MySQL password
-  replace: dest="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda/src/main/resources/META-INF/persistence.xml" regexp="%password%" replace="{{ mysql_password }}"
+- name: Setup watchtower-workflow-camunda MySQL persistence
+  template: src=persistence.xml.j2 dest="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda/src/main/resources/META-INF/persistence.xml" owner={{ansible_ssh_user}} mode=0644
 
 - name: Package watchtower-workflow-camunda
   command: mvn clean install

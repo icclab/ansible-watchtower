@@ -1,0 +1,90 @@
+# Watchtower workflow configuration
+name: watchtower-workflow
+
+# Server configuration
+server:
+  applicationConnectors:
+    - type: http
+      port: 9000
+  adminConnectors:
+    - type: http
+      port: 9001
+
+# Kafka consumer configuration
+kafkaConsumerConfiguration:
+  eventTopic: watchtower-monitoring-events
+  executionTopic: watchtower-automation-executions
+  numThreads: 2
+  groupId: watchtower-workflow
+  zookeeperConnect: localhost:2181
+  eventConsumerId: 1
+  executionConsumerId: 2
+  socketTimeoutMs: 30000
+  socketReceiveBufferBytes : 65536
+  fetchMessageMaxBytes: 1048576
+  autoCommitEnable: true
+  autoCommitIntervalMs: 60000
+  queuedMaxMessageChunks: 10
+  rebalanceMaxRetries: 4
+  fetchMinBytes:  1
+  fetchWaitMaxMs:  100
+  rebalanceBackoffMs: 2000
+  refreshLeaderBackoffMs: 200
+  autoOffsetReset: largest
+  consumerTimeoutMs:  -1
+  clientId : watchtower-workflow-consumer
+  zookeeperSessionTimeoutMs : 6000
+  zookeeperConnectionTimeoutMs : 6000
+  zookeeperSyncTimeMs: 2000
+
+# Kafka producer configuration
+kafkaProducerConfiguration:
+  topic: watchtower-automation-commands
+  metadataBrokerList: localhost:9092
+  serializerClass: kafka.serializer.StringEncoder
+  partitionerClass:
+  requestRequiredAcks: 1
+  requestTimeoutMs: 10000
+  producerType: sync
+  keySerializerClass:
+  compressionCodec: none
+  compressedTopics:
+  messageSendMaxRetries: 3
+  retryBackoffMs: 100
+  topicMetadataRefreshIntervalMs: 600000
+  queueBufferingMaxMs: 5000
+  queueBufferingMaxMessages: 10000
+  queueEnqueueTimeoutMs: -1
+  batchNumMessages: 200
+  sendBufferBytes: 102400
+  clientId : watchtower-workflow-producer
+
+workflowProvider: camunda
+
+camundaProviderConfiguration:
+  endpoint: http://localhost:8080/watchtower-workflow-camunda/rest/v1.0/workflow
+  numThreads: 1
+
+# Logging settings.
+logging:
+  # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
+  level: info
+
+  loggers:
+    watchtower.workflow: info
+
+  appenders:
+    - type: console
+      threshold: ALL
+      timeZone: UTC
+      target: stdout
+      logFormat: # TODO
+
+    - type: file
+      currentLogFilename: /var/log/watchtower/watchtower-workflow.log
+      threshold: info
+      archive: true
+      archivedLogFilenamePattern: /var/log/watchtower/watchtower-workflow-%d.log.gz
+      archivedFileCount: 5
+      timeZone: UTC
+      logFormat: # TODO
