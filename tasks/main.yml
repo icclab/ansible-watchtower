@@ -31,7 +31,7 @@
    - localhost
 
 - name: Copy .my.cnf file into the root home folder
-  template: src=.my-cnf.j2 dest=/root/.my.cnf owner=root mode=0600
+  template: src=.my.cnf.j2 dest=/root/.my.cnf owner=root mode=0600
 
 - name: Remove anonymous users from MySQL
   mysql_user: name='' host={{ item }} state=absent
