@@ -90,7 +90,7 @@
     chdir: "/home/{{ansible_ssh_user}}/watchtower-monitoring"
 
 - name: Install watchtower-monitoring
-  apt: deb="/home/{{ansible_ssh_user}}/watchtower-monitoring/debs/binaries/watchtower-monitoring-1.0.1-SNAPSHOT.deb"
+  apt: deb="/home/{{ansible_ssh_user}}/watchtower-monitoring/target/watchtower-monitoring-1.0.1-SNAPSHOT.deb"
 
 - name: Setup watchtower-monitoring
   template: src=monitoring-config.yml.j2 dest=/etc/watchtower/monitoring-config.yml owner=root mode=0644
@@ -115,7 +115,7 @@
     chdir: "/home/{{ansible_ssh_user}}/watchtower-workflow"
 
 - name: Install watchtower-workflow
-  apt: deb="/home/{{ansible_ssh_user}}/watchtower-workflow/debs/binaries/watchtower-workflow-1.0.1-SNAPSHOT.deb"
+  apt: deb="/home/{{ansible_ssh_user}}/watchtower-workflow/target/watchtower-workflow-1.0.1-SNAPSHOT.deb"
 
 - name: Setup watchtower-workflow
   template: src=workflow-config.yml.j2 dest=/etc/watchtower/workflow-config.yml owner=root mode=0644
@@ -140,7 +140,7 @@
     chdir: "/home/{{ansible_ssh_user}}/watchtower-automation"
 
 - name: Install watchtower-automation
-  apt: deb="/home/{{ansible_ssh_user}}/watchtower-automation/debs/binaries/watchtower-automation-1.0.1-SNAPSHOT.deb"
+  apt: deb="/home/{{ansible_ssh_user}}/watchtower-automation/target/watchtower-automation-1.0.1-SNAPSHOT.deb"
 
 - name: Setup watchtower-automation
   template: src=automation-config.yml.j2 dest=/etc/watchtower/automation-config.yml owner=root mode=0644
