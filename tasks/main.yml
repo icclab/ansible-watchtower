@@ -165,7 +165,7 @@
   unarchive: src="/home/{{ansible_ssh_user}}/camunda-bpm-tomcat-7.3.0-alpha3.tar.gz" dest="/home/{{ansible_ssh_user}}/camunda" copy=no
 
 - name: Start Camunda
-  shell: "/home/{{ansible_ssh_user}}/camunda/start-camunda.sh >> camunda.txt"
+  shell: "sudo nohup /home/{{ansible_ssh_user}}/camunda/start-camunda.sh &"
 
 - name: Download watchtower-workflow-camunda-1.0.1-SNAPSHOT
   git: repo=https://github.com/icclab/watchtower-workflow-camunda.git dest="/home/{{ansible_ssh_user}}/watchtower-workflow-camunda"
