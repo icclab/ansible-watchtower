@@ -55,6 +55,11 @@
   notify:
     - Restart MySQL
 
+- name: Create Kafka topics
+  command: /opt/kafka/bin/kafka-topics.sh --create --zookeeper {{zookeeper_hosts}} --replication-factor {{item.value.replicas}} --partitions {{item.value.partitions}} --topic {{item.key}}
+  with_dict: kafka_topics
+  when: check_result|failed
+
 - name: Download watchtower-common-1.0.1-SNAPSHOT
   git: repo=https://github.com/icclab/watchtower-common.git dest="/home/{{ansible_ssh_user}}/watchtower-common"
   when: not release

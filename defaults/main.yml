@@ -4,3 +4,8 @@ mysql_root_password: reallylongpassword
 mysql_username: watchtower
 mysql_password: anotherreallylongpassword
 mysql_database: watchtower
+
+kafka_topics:
+  watchtower-monitoring-events: { replicas: "1", partitions: "2" }
+  watchtower-automation-executions: { replicas: "1", partitions: "2" }
+  watchtower-automation-commands: { replicas: "1", partitions: "2" }
